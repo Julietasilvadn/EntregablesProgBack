@@ -1,6 +1,6 @@
 # Consigna
 
-## Clases con ECMAScript y ECMAScript avanzado
+## Manejo de archivos
 
 Realizar una clase “ProductManager”, el cual permitirá trabajar con múltiples productos. Éste debe poder agregar, consultar, modificar y eliminar un producto y manejarlo en persistencia de archivos (basado en entregable 1).
  - La clase debe contar con una variable this.path, el cual se inicializará desde el constructor y debe recibir la ruta a trabajar desde el momento de generar su instancia.
