@@ -48,10 +48,6 @@ class ProductManager {
       if (!title || !description || !price || !thumbnail || !stock) {
         throw new Error("Todos los campos son obligatorios.");
        }
-    
-      if (this.products.some(existingProduct => existingProduct.code === code)) {
-        throw new Error("El código del producto ya existe.");
-      }
 
       const code = this.generateCode();
 
