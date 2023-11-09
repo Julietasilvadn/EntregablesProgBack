@@ -43,15 +43,19 @@ class ProductManager {
       }
     }
   
-    addProduct(title, description, price, thumbnail, stock) {
+    addProduct(title, description, price, thumbnail, code, stock) {
 
-      if (!title || !description || !price || !thumbnail || !stock) {
+      if (!title || !description || !price || !thumbnail || !code || !stock) {
         throw new Error("Todos los campos son obligatorios.");
-       }
+      }
 
-      const code = this.generateCode();
+      if (this.products.some(existingProduct => existingProduct.code === code)) {
 
-      const product = { title, description, price, thumbnail, code, stock };
+        throw new Error("El código del producto ya existe.");
+    
+      }
+
+      const product = { title, description, price, thumbnail, code, stock, id: this.generateCode() };
 
       this.products.push(product);
       
@@ -61,7 +65,7 @@ class ProductManager {
     }
   
     getProductById(id) {
-      const product = this.products.find(p => p.code === id); 
+      const product = this.products.find(p => p.id === id); 
       if (product) {
         return product;
       } else {
@@ -71,7 +75,7 @@ class ProductManager {
 
     updateProduct(id, update){
       
-      const product = this.products.findIndex(p => p.code === id);
+      const product = this.products.findIndex(p => p.id === id);
         if (product !== -1) {
           const updatedProduct = Object.assign({}, this.products[product], update);
           this.products[product] = updatedProduct;
@@ -85,7 +89,7 @@ class ProductManager {
 
     deleteProduct(id){
       try {
-          const product = this.products.findIndex(p => p.code === id);
+          const product = this.products.findIndex(p => p.id === id);
           this.products.splice(product,1);
           this.saveProduct();
           console.log(`El producto con el id ${id} fue borrado`)
@@ -110,11 +114,11 @@ console.log("2. Resultado de getProducts:", products);
 // AGREGAR PRODUCTOS
 try {
 
-  product1 = manager.addProduct("producto 1", "Este es el producto de prueba 1", 100, "sin imagen", 10);
-  product2 = manager.addProduct("producto 2", "Este es el producto de prueba 2", 150, "sin imagen", 15);
-  product3 = manager.addProduct("producto 3", "Este es el producto de prueba 3", 200, "sin imagen", 20);
-  product4 = manager.addProduct("producto 4", "Este es el producto de prueba 4", 250, "sin imagen", 25);
-  product5 = manager.addProduct("producto 5", "Este es el producto de prueba 5", 300, "sin imagen", 30);
+  product1 = manager.addProduct("producto 1", "Este es el producto de prueba 1", 100, "sin imagen","asd123", 10);
+  product2 = manager.addProduct("producto 2", "Este es el producto de prueba 2", 150, "sin imagen","asd124", 15);
+  product3 = manager.addProduct("producto 3", "Este es el producto de prueba 3", 200, "sin imagen","asd125", 20);
+  product4 = manager.addProduct("producto 4", "Este es el producto de prueba 4", 250, "sin imagen","asd126", 25);
+  product5 = manager.addProduct("producto 5", "Este es el producto de prueba 5", 300, "sin imagen","asd127", 30);
 
   console.log("3. Productos agregados");
 
@@ -128,11 +132,10 @@ const productsAfterAdding = manager.getProducts();
 
 console.log("4. Productos después de agregar uno:", productsAfterAdding);
 
-// AGREGARUN PRODUCTO REPETIDO
-// NO ME DA ERROREN EL REPETIDO PORQUE NO PUEDO ACCEDER AL CODE ANTES 
+// AGREGAR UN PRODUCTO REPETIDO
 try {
 
-  const product6 = manager.addProduct("producto repetido", "Este es un producto repetido", 150, "Otra imagen", 15);
+  const product6 = manager.addProduct("producto repetido", "Este es un producto repetido", 150, "Otra imagen","asd123", 15);
 
   console.log("5. Producto repetido agregado:", product6);
 
