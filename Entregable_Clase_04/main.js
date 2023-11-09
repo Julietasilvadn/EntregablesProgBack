@@ -55,7 +55,7 @@ class ProductManager {
 
       this.products.push(product);
       
-      this.saveProduct;
+      this.saveProduct();
 
       return product;
     }
@@ -107,6 +107,7 @@ const products = manager.getProducts();
 
 console.log("2. Resultado de getProducts:", products);
 
+// AGREGAR PRODUCTOS
 try {
 
   product1 = manager.addProduct("producto 1", "Este es el producto de prueba 1", 100, "sin imagen", 10);
@@ -127,9 +128,11 @@ const productsAfterAdding = manager.getProducts();
 
 console.log("4. Productos después de agregar uno:", productsAfterAdding);
 
+// AGREGARUN PRODUCTO REPETIDO
+// NO ME DA ERROREN EL REPETIDO PORQUE NO PUEDO ACCEDER AL CODE ANTES 
 try {
 
-  const product6 = manager.addProduct("producto repetido", "Este es un producto repetido", 150, "Otra imagen",1, 15);
+  const product6 = manager.addProduct("producto repetido", "Este es un producto repetido", 150, "Otra imagen", 15);
 
   console.log("5. Producto repetido agregado:", product6);
 
@@ -138,6 +141,8 @@ try {
   console.log("5. Error al agregar producto repetido:", error.message);
 
 }
+
+// GET BY ID (EXISTE)
 
 try {
 
@@ -151,6 +156,7 @@ try {
 
 }
 
+// GET BY ID (NO EXISTE)
 try {
 
   const productNotFound = manager.getProductById(90);
@@ -163,6 +169,8 @@ try {
 
 }
 
+// UPDATE
+
 try {
   const updateProduct = manager.updateProduct(1, {title: "producto con el titulo editado", thumbnail: "sin imagen pero editado"});
 
@@ -173,6 +181,8 @@ try {
   console.log("7. Error al editar producto:", error.message);
 
 }
+
+// DELETE
 
 try {
   
