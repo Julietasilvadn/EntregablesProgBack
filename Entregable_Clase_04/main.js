@@ -55,7 +55,7 @@ class ProductManager {
     
       }
 
-      const product = { title, description, price, thumbnail, code, stock, id: this.generateCode() };
+      const product = {id: this.generateCode(), title, description, price, thumbnail, code, stock };
 
       this.products.push(product);
       
@@ -191,7 +191,7 @@ try {
   
   const deletedProduct = manager.deleteProduct(2);
 
-  console.log("8. Producto borrado con exito: ", deletedProduct)
+  console.log("8. Producto borrado con exito")
 
 } catch (error) {
 
