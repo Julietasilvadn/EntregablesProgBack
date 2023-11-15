@@ -16,8 +16,3 @@ Realizar una clase “ProductManager”, el cual permitirá trabajar con múltip
 - Debe contar con un método “getProductById” el cual debe buscar en el arreglo el producto que coincida con el id (En caso de no coincidir ningún id, mostrar en consola un error “Not found”).
 - Debe tener un método updateProduct, el cual debe recibir el id del producto a actualizar, así también como el campo a actualizar (puede ser el objeto completo, como en una DB), y debe actualizar el producto que tenga ese id en el archivo. NO DEBE BORRARSE SU ID.
 - Debe tener un método deleteProduct, el cual debe recibir un id y debe eliminar el producto que tenga ese id en el archivo.
-
-
-
-
-
