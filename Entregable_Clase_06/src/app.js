@@ -1,6 +1,6 @@
-const express = require('express')
-const app = express()
-PORT = 8080
+const express = require('express');
+const app = express();
+PORT = 8080;
 const ProductManager = require('./main.js');
 const productManager = new ProductManager('products.json');
 
@@ -17,7 +17,7 @@ app.get('/products',async (req,res)=>{
         await res.send(JSON.stringify(products.slice(0, limit), null, 2));
     }
         
-})
+});
 
 app.get('/products/:pid', async (req,res)=>{
     let idProduct = parseInt(req.params.pid)
@@ -30,7 +30,7 @@ app.get('/products/:pid', async (req,res)=>{
     }
 
     
-})
+});
 
 // SERVIDOR ----------------------------------------------------------------------------------------------------------------
 
