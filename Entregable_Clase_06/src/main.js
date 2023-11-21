@@ -5,18 +5,24 @@ const fs = require('fs');
 class ProductManager {
     constructor(path) {
       this.products = [];
-      this.path = path;
+      this.path = `${__dirname}/products.json`;
       this.lastProductId = 0;
-      this.loadProducts();
+      this.loadProducts().then(() => {
+
+        console.log("Productos cargados:", this.products);
+        
+        });
 
     }
 
     async loadProducts() {
       try {
-        const data = await fs.readFileSync(this.path);
+        const data = await fs.promises.readFile(this.path);
         this.products = JSON.parse(data);
         this.lastProductId = this.products.reduce((maxId, product) => Math.max(maxId, product.id), 0);
+        console.log("Productos cargados:", this.products);
       } catch (error) {
+        console.error("Error al cargar productos:", error);
         this.products = [];
         this.lastProductId = 0;
       }
@@ -65,11 +71,15 @@ class ProductManager {
     }
   
     async getProductById(id) {
-      const product = await this.products.find(p => p.id === id); 
-      if (product) {
-        return product;
-      } else {
-        throw new Error("Producto no encontrado");
+      try {
+        const product = await this.products.find(p => p.id === id); 
+        if (!product) {
+          throw new Error("Producto no encontrado");
+        } else {
+          return product;
+        }
+      } catch (error) {
+        throw new Error("Error al buscar producto");
       }
     }
 
