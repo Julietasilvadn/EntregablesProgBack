@@ -38,8 +38,12 @@
     "products": [
       {
         "product": 1,
-        "quantity": 1
+        "quantity": 2
       }
     ]
+  },
+  {
+    "id": 7,
+    "products": []
   }
 ]

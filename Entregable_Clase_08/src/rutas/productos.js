@@ -6,14 +6,17 @@ const productos = new ProductManager('src/db/productos.json');
 
 //ENDPOINTS ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-rutaProducto.get('/products',async (req,res)=>{
+rutaProducto.get('/',async (req,res)=>{
     try {
         let limit = await parseInt(req.query.limit);
         let products;
         if(!limit){
-            await res.sendFile(__dirname+'/products.json')
+            const data1 = JSON.stringify(await productos.getProducts());
+            products = JSON.parse(data1)
+            res.setHeader('Content-Type', 'application/json')
+            res.send( JSON.stringify(await products, null,2));
         } else{
-            const data = await fs.readFileSync('products.json')
+            const data = await fs.readFileSync('productos.json')
             products = JSON.parse(data)
             res.setHeader('Content-Type', 'application/json')
             await res.send(JSON.stringify(products.slice(0, limit), null, 2));
@@ -23,10 +26,10 @@ rutaProducto.get('/products',async (req,res)=>{
     }   
 });
 
-rutaProducto.get('/products/:pid', async (req,res)=>{
+rutaProducto.get('/:pid', async (req,res)=>{
     const productId = parseInt(req.params.pid);
     try {
-        const product = await productManager.getProductById(productId);
+        const product = await productos.getProductById(productId);
         res.setHeader("Content-Type", "application/json");
         res.send(JSON.stringify(product, null, 2));
       } catch (error) {
