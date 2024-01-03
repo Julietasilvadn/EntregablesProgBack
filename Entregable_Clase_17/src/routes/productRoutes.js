@@ -1,8 +1,8 @@
 import express from "express";
 import { ProductManager } from "../models/ProductModel.js";
-const rutaProducto = express.Router();
 
-const productos = new ProductManager('src/db/products.json');
+const rutaProducto = express.Router();
+const productos = new ProductManager();
 
 //ENDPOINTS ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 rutaProducto.get('/realTimeProducts', (req, res) => {
@@ -11,21 +11,45 @@ rutaProducto.get('/realTimeProducts', (req, res) => {
 
 rutaProducto.get('/',async (req,res)=>{
     try {
-        let limit = await parseInt(req.query.limit);
-        let products;
-        if(!limit){
-            const data1 = JSON.stringify(await productos.getProducts());
-            products = JSON.parse(data1)
-            res.render('home', { products });
-        } else{
-            const data = await fs.readFileSync('src/db/products.json')
-            products = JSON.parse(data)
-            productLimit = JSON.stringify(products.slice(0, limit), null, 2)
-            res.render('home', { productLimit });
-        }
-    } catch (error) {
-        res.status(500).send('Error al obtener los productos');
-    }   
+        const limit = parseInt(req.query.limit) || 10;
+        const page = parseInt(req.query.page) || 1;
+        const sort = req.query.sort === 'desc' ? -1 : 1;
+        const query = req.query.query || '';
+        const category = req.query.category || '';
+        const availability = req.query.availability || '';
+    
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+    
+        const products = await productos.getProducts();
+  
+        const filteredByCategory = category
+        ? products.filter((product) => product.category === category)
+        : products;
+  
+        const filteredByAvailability = availability === 'available'
+        ? filteredByCategory.filter((product) => product.stock > 0)
+        : filteredByCategory;
+  
+        const filteredByQuery = query
+        ? filteredByAvailability.filter((product) =>
+            product.title.toLowerCase().includes(query.toLowerCase()) ||
+            product.description.toLowerCase().includes(query.toLowerCase())
+          )
+        : filteredByAvailability;
+  
+  
+        const sortedProducts = filteredByQuery.sort((a, b) =>
+          a.price > b.price ? sort : -sort
+        );
+  
+        const paginatedProducts = sortedProducts.slice(startIndex, endIndex);
+  
+        res.render('home', { products: paginatedProducts });
+      } catch (error) {
+        console.error('Error al obtener los productos:', error);
+        res.status(500).json({ error: 'Error al obtener los productos' });
+      }  
 });
 
 rutaProducto.get('/:pid', async (req,res)=>{
